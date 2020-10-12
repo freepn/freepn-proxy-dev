@@ -2,11 +2,18 @@
 # install-cert.sh
 # installs custom root CA cert to user-level nss trust store db files
 
+#set -x
+
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export LC_ALL=C
+
+# environemt vars
+#VERBOSE="anything"
+
 certfile="${HOME}/.mitmproxy/mitmproxy-ca-cert.pem"
 certname="FreePN Personal Root CA"
 tgtdirs="${HOME}/.pki ${HOME}/.mozilla"
 searchdirs=""
-
 
 for tgt in $tgtdirs; do
 	if [[ -d $tgt ]]; then
@@ -15,7 +22,7 @@ for tgt in $tgtdirs; do
 done
 
 if [[ -n $searchdirs ]]; then
-	echo "Searching for db files in: ${searchdirs}"
+	[[ -n $VERBOSE ]] && echo "Searching for db files in: ${searchdirs}"
 else
 	echo "No install targets found!"
 	exit 0
@@ -26,22 +33,21 @@ for db8file in $(find ${searchdirs} -writable -name "cert8.db"); do
 	chkres=$(certutil -L -d dbm:${certdir} | grep -o FreePN)
 	echo "Check result: $chkres"
 	if ! [[ -n ${chkres} ]]; then
-		echo "can install cert8.db to ${certdir}"
+		[[ -n $VERBOSE ]] && echo "can install cert8.db to ${certdir}"
 		#certutil -A -n "${certname}" -t "TCu,Cu,Tu" -i ${certfile} -d dbm:${certdir}
 	else
-		echo "cert already installed in ${certdir}"
+		[[ -n $VERBOSE ]] && echo "cert already installed in ${certdir}"
 	fi
 done
-
 
 for db9file in $(find ${searchdirs} -writable -name "cert9.db"); do
 	certdir=$(dirname ${db9file})
 	chkres=$(certutil -L -d sql:${certdir} | grep -o FreePN)
 	echo "Check result: $chkres"
 	if ! [[ -n ${chkres} ]]; then
-		echo "can install cert9.db to ${certdir}"
+		[[ -n $VERBOSE ]] && echo "can install cert9.db to ${certdir}"
 		#certutil -A -n "${certname}" -t "TCu,Cu,Tu" -i ${certfile} -d sql:${certdir}
 	else
-		echo "cert already installed in ${certdir}"
+		[[ -n $VERBOSE ]] && echo "cert already installed in ${certdir}"
 	fi
 done
