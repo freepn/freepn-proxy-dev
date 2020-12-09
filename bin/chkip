@@ -1,0 +1,14 @@
+#! /usr/bin/env bash
+# proxy-runner.sh
+#
+
+#set -x
+
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export LC_ALL=C
+
+export http_proxy="127.0.0.1:8080"
+export https_proxy="127.0.0.1:8080"
+
+wget --timeout=2 --waitretry=0 --tries=3 -O -  \
+  https://geoip.ubuntu.com/lookup | sed -n -e 's/.*<Ip>\(.*\)<\/Ip>.*/\1/p'
