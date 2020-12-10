@@ -1,3 +1,5 @@
 adblockparser==0.7
 git+https://github.com/mitmproxy/mitmproxy.git@v5.3.0#egg=mitmproxy[dev]
 git+https://github.com/freepn/py-re2@0.3.1-1#egg=py_re2
+beautifulsoup4==4.9.3
+honcho==1.0.1

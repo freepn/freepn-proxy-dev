@@ -15,3 +15,9 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/src
 # make sure this path is correct
 source /usr/bin/virtualenvwrapper.sh
+
+# change default proxy cache/log dir under $HOME
+# note this is not generally necessary; the default is the XDG user
+# location: $HOME/.cache/freepn-proxy
+# if you change this, the path MUST be inside your $HOME dir
+#export CACHEPATH=some/path

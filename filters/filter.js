@@ -1,3 +1,5 @@
+// js filter scripts are Creative Commons CC0
+//
 // see js_setfilter.py for basic usage; in this file you need to
 // replace /path/to/script.js with the path to the script to inject
 if(parent.document.URL!=document.location.href)

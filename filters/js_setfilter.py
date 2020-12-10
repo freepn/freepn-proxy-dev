@@ -1,3 +1,5 @@
+# js filter scripts are Creative Commons CC0
+#
 # Adapted from:
 #  http://pankajmalhotra.com/Injecting-Javascript-In-HTML-Content-Using-MITM-Proxy
 #
