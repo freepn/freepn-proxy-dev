@@ -30,6 +30,9 @@ class jsInjector():
             return
         #flow.response.headers.pop('Strict-Transport-Security', None)
         #flow.response.headers.pop('Content-Security-Policy', None)
+        orig_encoding = flow.response.headers.get("content-encoding")
+        if orig_encoding:
+            ctx.log.info('Got content encoding: {}'.format(orig_encoding))
 
         html = BeautifulSoup(flow.response.text, 'lxml')
 
@@ -40,6 +43,6 @@ class jsInjector():
                 src=ctx.options.filterurl)
             html.body.insert(0, script)
             flow.response.text = str(html)
-            ctx.log.info('Call to {} has modified the flow!'.format(ctx.options.filterurl))
+            ctx.log.info('Filter URL {} has been injected!'.format(ctx.options.filterurl))
 
 addons = [jsInjector()]

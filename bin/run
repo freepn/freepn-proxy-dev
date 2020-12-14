@@ -54,6 +54,6 @@ else
 
 	$CMD -s adblock.py -p $PORT \
 		--set stream_large_bodies=100k -q --flow-detail 0 --anticache \
-		--anticomp --set ssl_insecure false \
-		--set ssl_verify_upstream_trusted_confdir "$TRUSTDIR"
+		--anticomp --set ssl_insecure=false \
+		--set ssl_verify_upstream_trusted_confdir="$TRUSTDIR"
 fi
