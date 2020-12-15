@@ -1,0 +1,15 @@
+#! /usr/bin/env bash
+# run links with proxy set
+#
+
+#set -x
+
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+export LC_ALL=C
+
+export http_proxy="127.0.0.1:8080"
+export https_proxy="127.0.0.1:8080"
+
+links -http-proxy $http_proxy -https-proxy $https_proxy -ssl.certificates 0 "$@"
+# lynx
+# proxy support broken on lynx?

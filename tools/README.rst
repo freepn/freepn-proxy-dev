@@ -8,3 +8,6 @@ script.
 
 To modify the CN or other metadata, edit ``certificate.conf`` before running
 the script.
+
+.. note:: Make sure the local domain, local IP, and email are what you want
+          before using the cert.

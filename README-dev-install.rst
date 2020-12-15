@@ -16,11 +16,14 @@ Recommended approach:
   + pip virtualenv virtualenvwrapper
   + use local tools: ``emerge`` or ``apt-get`` or ``pip``
 
+Setup virtualenvwrapper
+-----------------------
+
 * create a new virtualenv/project using virtualenvwrapper
 
-  + first edit .bashrc as needed (see below) then
+  + first edit bashrc.sh as needed (see below) then
 
-    - ``source ~/.bashrc``
+    - ``source bashrc.sh``
     - ``mkproject proxy-dev``
 
 * the previous command should leave you in the new project dir
@@ -75,8 +78,103 @@ Required ``bash`` environment for using virtualenvwrapper; add to your
   source /usr/bin/virtualenvwrapper.sh
 
 
+Running the tools
+-----------------
 
-More information about the general setup:
+The current set of dev-tools is intended for testing/analyzing proxy
+scripts in a local virtualenv, and consist mainly of env/Procfile and
+shell scripts.  Using ``honcho`` is optional; you can always run one
+of the web servers and the proxy in separate terminals with whatever
+arguments you need (honcho and shell tools only tested on Linux so
+far).
+
+.. note:: With the current .js filter sources hosted on a public ``https``
+          server, there is no need to run a local web server in parallel
+          with the proxy, thus the default http config will only launch a
+          single process.
+ 
+
+Configs for ``honcho`` consist of a Procfile and env file; the default
+names are ``Procfile`` and ``.env`` but alternate names can also be passed
+via arguments to ``honcho``.
+
+* honcho default filter config
+
+  + ``Procfile`` and ``env.filter``
+  + copy ``env.filter`` to ``.env``
+  + run ``honcho start``
+
+* honcho adblock config
+
+  + ``Procfile.adblock`` and ``env.adblock``
+  + copy to default names and run ``honcho start``
+  + or use an alternate command, something like:
+
+::
+
+  $ honcho -e env.adblock -f Procfile.adblock start
+
+
+To see more output, run proxy adblock command from a terminal::
+
+  mitmdump -s adblock/adblock.py -p 8080 \
+      --set stream_large_bodies=100k -q --flow-detail 0 --anticache \
+      --anticomp --set ssl_insecure=false \
+		--set ssl_verify_upstream_trusted_confdir="$TRUSTDIR"
+
+Be sure and export (or replace) the "$TRUSTDIR" variable for your distro,
+eg, ``/etc/ssl/certs/`` for Gentoo or Ubuntu.
+
+* honcho http-only (local) config
+
+  + ``Procfile.fltr-http`` and ``env.fltr-http``
+  + copy to default names and run ``honcho start``
+  + or use an alternate command, something like:
+
+::
+
+  $ honcho -e env.fltr-http -f Procfile.fltr-http start
+
+
+To see a bit more output from each process, run in separate terminals.
+
+Open a terminal window and start the http server to host the remote
+javascript resources::
+
+  $ python -m http.server --directory filters/ 8000
+
+and then start the proxy in a second terminal window using a filterurl
+pointing to the above http server::
+
+  $ mitmdump -s filters/filter_injector.py \
+      --set filterurl=http://localhost:8000/filter.js \
+      -p 8080 --anticache --anticomp
+
+.. note:: For the above to work, the remote resource contained in the
+          ``filter.js`` script must also use an http URL, and you must
+          be browsing a web site that allows http-only. In this example
+          ``filter.js`` contains an equivalent filterurl pointing to
+          ``http://localhost:8000/script.js``.
+
+
+
+Additional helper tools to use while running the proxy include the
+following:
+
+* shell tools preconfigured for ``localhost`` proxy (start proxy first)
+
+  + ``bin/chkip`` - wrapper script for wget geoip lookup over proxy
+  + ``bin/links`` - wrapper script for links browser over proxy
+
+* shell tools preconfigured for adblock script
+
+  + ``adblock/bin/proxy-runner.sh``
+  + ``adblock/bin/update-blocklists.sh``
+  + ``adblock/bin/install-cert.sh``
+
+
+
+More information about the virtualenv setup:
 
 * `pelican setup readme`_
 * `python venv on macos`_
@@ -91,11 +189,15 @@ Currently supported proxy modes:
 
 * proxy mode - requires browser/environment configuration for local traffic
 
-Specific configurations vary across OS and applications; most linux distos
-have a "system" config/env variables, however, the "big" browser apps mainly
-use their own configuration options (which should include an optin for
-"use system settings").  Note the same "config" issues also apply to the
-system trustdb (ie, which trusted certificate store is used by different
-applications).
+Specific configurations vary across OS and applications; most linux distros
+have a "system" config/env variables for proxy config, however, the "big"
+browser apps mainly use their own configuration options (which should
+include an option for "use system proxy settings").  Note the same "config"
+issues also apply to the system trustdb (ie, which trusted certificate
+store is used by different applications).
 
-* transparent mode - 
+.. tip:: The FoxyProxy plugin for firefox can be used to easily enable
+         disable mutiple proxy configurations for testing.
+
+* transparent mode - TODO
+
