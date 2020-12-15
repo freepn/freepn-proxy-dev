@@ -118,12 +118,12 @@ via arguments to ``honcho``.
 To see more output, run proxy adblock command from a terminal::
 
   mitmdump -s adblock/adblock.py -p 8080 \
-      --set stream_large_bodies=100k -q --flow-detail 0 --anticache \
-      --anticomp --set ssl_insecure=false \
-		--set ssl_verify_upstream_trusted_confdir="$TRUSTDIR"
+      --set stream_large_bodies=100k -q --flow-detail 0 \
+      --anticache --anticomp
 
-Be sure and export (or replace) the "$TRUSTDIR" variable for your distro,
-eg, ``/etc/ssl/certs/`` for Gentoo or Ubuntu.
+
+.. note:: Feel free to remove ``-q`` and adjust the flow detail as needed.
+
 
 * honcho http-only (local) config
 
@@ -150,12 +150,12 @@ pointing to the above http server::
       --set filterurl=http://localhost:8000/filter.js \
       -p 8080 --anticache --anticomp
 
+
 .. note:: For the above to work, the remote resource contained in the
           ``filter.js`` script must also use an http URL, and you must
           be browsing a web site that allows http-only. In this example
           ``filter.js`` contains an equivalent filterurl pointing to
           ``http://localhost:8000/script.js``.
-
 
 
 Additional helper tools to use while running the proxy include the

@@ -1,1 +1,1 @@
-proxy: mitmdump -s $FILTER -p $PPORT $ADBLOCK --set ssl_insecure=false --set ssl_verify_upstream_trusted_confdir=$TRUSTDIR
+proxy: mitmdump -s $FILTER -p $PPORT $ADBLOCK --set ssl_insecure=false
