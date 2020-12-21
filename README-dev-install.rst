@@ -32,7 +32,7 @@ Setup virtualenvwrapper
 
 * clone this repo into the new project dir (note the trailing '.')
 
-  + ``git clone git@github.com:freepn/freepn-proxy.git .``
+  + ``git clone git@github.com:freepn/freepn-proxy-dev.git .``
 
 * upgrade pip and setuptools in the new virtualenv
 
